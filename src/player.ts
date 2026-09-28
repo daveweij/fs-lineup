@@ -12,10 +12,23 @@ export function createPlayer(player: Player, parentEl: HTMLDivElement) {
 
   playerEl.innerHTML = `
   <span class="player-avatar">${player.number}</span>
-  <span class="player-name">${player.name}</span>
+  <span class="player-name-field">
+    <span class="player-name"></span>
+    <button class="player-change" aria-label="Change player name" type="button">🔄</button>
+  </span>
   `;
 
+  const playerNameEl = playerEl.querySelector<HTMLSpanElement>(".player-name")!;
+  playerNameEl.textContent = player.name;
+
   playerEl.addEventListener("pointerdown", (event) => {
+    if (
+      event.target instanceof Element &&
+      event.target.closest(".player-change, .player-name-input")
+    ) {
+      return;
+    }
+
     console.log("Pointer down");
     playerEl.setPointerCapture(event.pointerId);
   });
@@ -41,6 +54,48 @@ export function createPlayer(player: Player, parentEl: HTMLDivElement) {
 
   playerEl.addEventListener("lostpointercapture", () => {
     console.log("Pointer capture lost");
+  });
+
+  const playerChangeEl =
+    playerEl.querySelector<HTMLButtonElement>(".player-change")!;
+
+  playerChangeEl.addEventListener("click", () => {
+    console.log("Changing player name");
+
+    const nameEl = playerEl.querySelector<HTMLSpanElement>(".player-name");
+    if (!nameEl) return;
+
+    const originalPlayerName = nameEl.textContent || "";
+
+    const inputEl = document.createElement("input");
+    inputEl.type = "text";
+    inputEl.value = nameEl.textContent || "";
+    inputEl.classList.add("player-name-input");
+    nameEl.replaceWith(inputEl);
+    inputEl.focus();
+
+    inputEl.addEventListener("blur", () => {
+      const newName =
+        inputEl.value.trim() !== "" ? inputEl.value.trim() : originalPlayerName;
+      player.name = newName;
+
+      nameEl.textContent = player.name;
+      inputEl.replaceWith(nameEl);
+    });
+
+    inputEl.addEventListener("keydown", (event) => {
+      if (event.isComposing) return;
+      if (event.key === "Enter") {
+        event.preventDefault();
+        inputEl.blur();
+      }
+
+      if (event.key === "Escape") {
+        event.preventDefault();
+        inputEl.value = originalPlayerName;
+        inputEl.blur();
+      }
+    });
   });
 
   return playerEl;
