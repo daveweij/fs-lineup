@@ -1,0 +1,32 @@
+<svg viewBox="0 0 768 962" width="768" height="962" role="img" aria-labelledby="pitch-title" xmlns="http://www.w3.org/2000/svg">
+      <title id="pitch-title">Football pitch</title>
+      <defs>
+        <pattern id="grass-stripes" x="24" y="30" width="720" height="150.333333" patternUnits="userSpaceOnUse">
+          <rect width="720" height="150.333333" fill="var(--grass-dark)" />
+          <rect width="720" height="75.166667" fill="var(--grass-light)" />
+        </pattern>
+      </defs>
+
+      <rect x="24" y="30" width="720" height="902" fill="url(#grass-stripes)" />
+
+      <g fill="none" stroke="var(--pitch-lines)" stroke-width="4" stroke-linejoin="round">
+        <rect x="24" y="30" width="720" height="902" />
+        <path d="M24 481H744" />
+        <circle cx="384" cy="481" r="88" />
+
+        <path d="M190 30V188H578V30 M296 30V82H472V30" />
+        <path d="M314 188A88 88 0 0 0 454 188" />
+
+        <path d="M190 932V774H578V932 M296 932V880H472V932" />
+        <path d="M314 774A88 88 0 0 1 454 774" />
+
+        <path d="M38 30A14 14 0 0 1 24 44 M730 30A14 14 0 0 0 744 44" />
+        <path d="M24 918A14 14 0 0 1 38 932 M730 932A14 14 0 0 1 744 918" />
+      </g>
+
+      <g fill="var(--pitch-lines)">
+        <circle cx="384" cy="135" r="5" />
+        <circle cx="384" cy="481" r="5" />
+        <circle cx="384" cy="827" r="5" />
+      </g>
+    </svg>
