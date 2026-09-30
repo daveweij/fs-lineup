@@ -44,8 +44,12 @@ export function createPlayer(player: Player, parentEl: HTMLDivElement) {
 
     const x = event.clientX - pitchRect.left - playersOffsetX;
     const y = event.clientY - pitchRect.top - playersOffsetY;
-    const clampedX = clamp(x, 0, pitchRect.width - playerRect.width);
-    const clampedY = clamp(y, 0, pitchRect.height - playerRect.height);
+    const clampedX = clamp(x, playersOffsetX, pitchRect.width - playersOffsetX);
+    const clampedY = clamp(
+      y,
+      playersOffsetY,
+      pitchRect.height - playersOffsetY,
+    );
     playerEl.style.left = `${clampedX}px`;
     playerEl.style.top = `${clampedY}px`;
 
