@@ -1,14 +1,12 @@
-type Player = { number: number; x: number; y: number; name: string };
+export type Player = { number: number; x: number; y: number; name: string };
 
 function clamp(value: number, min: number, max: number) {
   return Math.min(Math.max(value, min), max);
 }
 
-export function createPlayer(player: Player, parentEl: HTMLDivElement) {
+export function createPlayerElement(player: Player) {
   const playerEl = document.createElement("div");
   playerEl.classList.add("player");
-  playerEl.style.left = `${player.x}%`;
-  playerEl.style.top = `${player.y}%`;
 
   playerEl.innerHTML = `
   <span class="player-avatar">${player.number}</span>
@@ -20,6 +18,13 @@ export function createPlayer(player: Player, parentEl: HTMLDivElement) {
 
   const playerNameEl = playerEl.querySelector<HTMLSpanElement>(".player-name")!;
   playerNameEl.textContent = player.name;
+  return playerEl;
+}
+
+export function createPlayer(player: Player, parentEl: HTMLDivElement) {
+  const playerEl = createPlayerElement(player);
+  playerEl.style.left = `${player.x}%`;
+  playerEl.style.top = `${player.y}%`;
 
   playerEl.addEventListener("pointerdown", (event) => {
     if (

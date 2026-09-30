@@ -1,8 +1,9 @@
 import "./style.css";
 import pitch from "./assets/pitch.svg?raw";
 import { createPlayer } from "./player";
+import { createBench } from "./bench";
 
-const players = [
+const starters = [
   { number: 1, x: 50, y: 91, name: "Oliver" },
   { number: 2, x: 17, y: 75, name: "Harry" },
   { number: 3, x: 39, y: 75, name: "Jack" },
@@ -16,14 +17,26 @@ const players = [
   { number: 11, x: 73, y: 20, name: "James" },
 ];
 
+const substitutes = [
+  { number: 12, x: 10, y: 50, name: "Mia" },
+  { number: 13, x: 90, y: 50, name: "Ella" },
+];
+
 document.querySelector<HTMLDivElement>("#app")!.innerHTML = `
-  <main class="pitch">
-    ${pitch}
+  <main class="lineup">
+    <div class="pitch">
+      ${pitch}
+    </div>
   </main>
 `;
 
 const pitchEl = document.querySelector<HTMLDivElement>(".pitch")!;
-players.forEach((player) => {
+starters.forEach((player) => {
   const playerEl = createPlayer(player, pitchEl);
   pitchEl.appendChild(playerEl);
 });
+
+const benchEl = createBench(substitutes);
+if (benchEl) {
+  document.querySelector<HTMLElement>(".lineup")!.appendChild(benchEl);
+}

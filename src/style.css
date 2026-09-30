@@ -20,16 +20,23 @@ body {
   width: 100%;
 }
 
-.pitch {
+.lineup {
+  display: grid;
+  grid-template-rows: 1fr auto;
   width: min(100%, calc(100svh * 768 / 962));
   margin: 0 auto;
+  height: 100svh;
+}
+
+.pitch {
   position: relative;
+  min-height: 0;
 }
 
 .pitch svg {
   display: block;
   width: 100%;
-  height: auto;
+  height: 100%;
 }
 
 .player {
@@ -67,4 +74,19 @@ body {
   background: rgba(255, 255, 255, 0.5);
   border-radius: 4px;
   padding: 2px 4px;
+}
+
+.bench {
+  display: flex;
+  gap: 1rem;
+  min-width: 0;
+  flex-wrap: wrap;
+}
+
+.bench > .player {
+  position: static;
+  transform: none;
+  flex: 0 0 auto;
+  touch-action: auto;
+  cursor: default;
 }
