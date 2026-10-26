@@ -1,13 +1,16 @@
-import { createPlayerElement, type Player } from "./player";
+import { createPlayerElement } from "./player";
+import type { PlayerId } from "./team";
 
-function createBench(substitutes: Player[]) {
-  if (substitutes.length === 0) return null;
+function createBench(substituteIds: PlayerId[]) {
+  if (substituteIds.length === 0) return null;
 
   const benchEl = document.createElement("section");
   benchEl.classList.add("bench");
 
-  substitutes.forEach((player) => {
-    const playerEl = createPlayerElement(player);
+  substituteIds.forEach((playerId) => {
+    const playerEl = createPlayerElement(playerId);
+    if (!playerEl) return;
+
     benchEl.appendChild(playerEl);
   });
 

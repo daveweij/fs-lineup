@@ -1,10 +1,15 @@
-export type Player = { number: number; x: number; y: number; name: string };
+import { playersById, type PlayerId } from "./team";
+
+export type Starter = { playerId: PlayerId; x: number; y: number };
 
 function clamp(value: number, min: number, max: number) {
   return Math.min(Math.max(value, min), max);
 }
 
-export function createPlayerElement(player: Player) {
+export function createPlayerElement(playerId: PlayerId) {
+  const player = playersById.get(playerId);
+  if (!player) return null;
+
   const playerEl = document.createElement("div");
   playerEl.classList.add("player");
 
@@ -21,10 +26,12 @@ export function createPlayerElement(player: Player) {
   return playerEl;
 }
 
-export function createPlayer(player: Player, parentEl: HTMLDivElement) {
-  const playerEl = createPlayerElement(player);
-  playerEl.style.left = `${player.x}%`;
-  playerEl.style.top = `${player.y}%`;
+export function createStarter(starter: Starter, pitchEl: HTMLDivElement) {
+  const playerEl = createPlayerElement(starter.playerId);
+  if (!playerEl) return null;
+
+  playerEl.style.left = `${starter.x}%`;
+  playerEl.style.top = `${starter.y}%`;
 
   playerEl.addEventListener("pointerdown", (event) => {
     if (
@@ -34,14 +41,13 @@ export function createPlayer(player: Player, parentEl: HTMLDivElement) {
       return;
     }
 
-    console.log("Pointer down");
     playerEl.setPointerCapture(event.pointerId);
   });
 
   playerEl.addEventListener("pointermove", (event) => {
     if (!playerEl.hasPointerCapture(event.pointerId)) return;
 
-    const pitchRect = parentEl.getBoundingClientRect();
+    const pitchRect = pitchEl.getBoundingClientRect();
     const playerRect = playerEl.getBoundingClientRect();
 
     const x = event.clientX - pitchRect.left;
@@ -79,6 +85,10 @@ export function createPlayer(player: Player, parentEl: HTMLDivElement) {
     inputEl.addEventListener("blur", () => {
       const newName =
         inputEl.value.trim() !== "" ? inputEl.value.trim() : originalPlayerName;
+
+      const player = playersById.get(starter.playerId);
+      if (!player) return;
+
       player.name = newName;
 
       nameEl.textContent = player.name;
