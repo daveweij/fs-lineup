@@ -44,33 +44,26 @@ export function createPlayer(player: Player, parentEl: HTMLDivElement) {
     const pitchRect = parentEl.getBoundingClientRect();
     const playerRect = playerEl.getBoundingClientRect();
 
-    const playersOffsetX = 0.5 * playerRect.width;
-    const playersOffsetY = 0.5 * playerRect.height;
-
-    const x = event.clientX - pitchRect.left - playersOffsetX;
-    const y = event.clientY - pitchRect.top - playersOffsetY;
-    const clampedX = clamp(x, playersOffsetX, pitchRect.width - playersOffsetX);
+    const x = event.clientX - pitchRect.left;
+    const y = event.clientY - pitchRect.top;
+    const clampedX = clamp(
+      x,
+      0.5 * playerRect.width,
+      pitchRect.width - 0.5 * playerRect.width,
+    );
     const clampedY = clamp(
       y,
-      playersOffsetY,
-      pitchRect.height - playersOffsetY,
+      0.5 * playerRect.height,
+      pitchRect.height - 0.5 * playerRect.height,
     );
     playerEl.style.left = `${clampedX}px`;
     playerEl.style.top = `${clampedY}px`;
-
-    console.log(`Moving player to (${x}, ${y})`);
-  });
-
-  playerEl.addEventListener("lostpointercapture", () => {
-    console.log("Pointer capture lost");
   });
 
   const playerChangeEl =
     playerEl.querySelector<HTMLButtonElement>(".player-change")!;
 
   playerChangeEl.addEventListener("click", () => {
-    console.log("Changing player name");
-
     const nameEl = playerEl.querySelector<HTMLSpanElement>(".player-name");
     if (!nameEl) return;
 
