@@ -36,7 +36,7 @@ export function createStarter(starter: Starter, pitchEl: HTMLDivElement) {
   playerEl.addEventListener("pointerdown", (event) => {
     if (
       event.target instanceof Element &&
-      event.target.closest(".player-change, .player-name-input")
+      event.target.closest(".player-change, .player-picker")
     ) {
       return;
     }
@@ -70,43 +70,38 @@ export function createStarter(starter: Starter, pitchEl: HTMLDivElement) {
     playerEl.querySelector<HTMLButtonElement>(".player-change")!;
 
   playerChangeEl.addEventListener("click", () => {
-    const nameEl = playerEl.querySelector<HTMLSpanElement>(".player-name");
-    if (!nameEl) return;
-
-    const originalPlayerName = nameEl.textContent || "";
-
-    const inputEl = document.createElement("input");
-    inputEl.type = "text";
-    inputEl.value = nameEl.textContent || "";
-    inputEl.classList.add("player-name-input");
-    nameEl.replaceWith(inputEl);
-    inputEl.focus();
-
-    inputEl.addEventListener("blur", () => {
-      const newName =
-        inputEl.value.trim() !== "" ? inputEl.value.trim() : originalPlayerName;
-
-      const player = playersById.get(starter.playerId);
-      if (!player) return;
-
-      player.name = newName;
-
-      nameEl.textContent = player.name;
-      inputEl.replaceWith(nameEl);
+    const selectionEl = document.createElement("select");
+    selectionEl.classList.add("player-picker");
+    playersById.forEach((player) => {
+      const optionEl = document.createElement("option");
+      optionEl.value = player.id;
+      optionEl.textContent = player.name;
+      if (player.id === starter.playerId) {
+        optionEl.selected = true;
+      }
+      selectionEl.appendChild(optionEl);
     });
 
-    inputEl.addEventListener("keydown", (event) => {
-      if (event.isComposing) return;
-      if (event.key === "Enter") {
-        event.preventDefault();
-        inputEl.blur();
-      }
+    const playerNameEl =
+      playerEl.querySelector<HTMLSpanElement>(".player-name-field")!;
+    playerNameEl.replaceWith(selectionEl);
 
-      if (event.key === "Escape") {
-        event.preventDefault();
-        inputEl.value = originalPlayerName;
-        inputEl.blur();
-      }
+    selectionEl.focus();
+    selectionEl.showPicker();
+    selectionEl.addEventListener("change", () => selectionEl.blur());
+
+    selectionEl.addEventListener("blur", () => {
+      const newPlayerId = selectionEl.value;
+      const newPlayer = playersById.get(newPlayerId);
+      if (!newPlayer) return;
+
+      starter.playerId = newPlayer.id;
+      const newPlayerEl = createStarter(starter, pitchEl);
+      if (!newPlayerEl) return;
+
+      newPlayerEl.style.left = playerEl.style.left;
+      newPlayerEl.style.top = playerEl.style.top;
+      playerEl.replaceWith(newPlayerEl);
     });
   });
 
