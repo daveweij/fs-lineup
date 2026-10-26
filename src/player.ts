@@ -62,8 +62,15 @@ export function createStarter(starter: Starter, pitchEl: HTMLDivElement) {
       0.5 * playerRect.height,
       pitchRect.height - 0.5 * playerRect.height,
     );
-    playerEl.style.left = `${clampedX}px`;
-    playerEl.style.top = `${clampedY}px`;
+
+    const clampedXPercent = (clampedX / pitchRect.width) * 100;
+    const clampedYPercent = (clampedY / pitchRect.height) * 100;
+
+    starter.x = clampedXPercent;
+    starter.y = clampedYPercent;
+
+    playerEl.style.left = `${starter.x}%`;
+    playerEl.style.top = `${starter.y}%`;
   });
 
   const playerChangeEl =
